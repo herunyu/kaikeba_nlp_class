@@ -17,7 +17,7 @@ def read_data(path_1, path_2, path_3):
         words = []
         # print(f1)
         for line in f1:
-            words = line.split()
+            words += line.split()
 
         for line in f2:
             words += line.split(' ')
