@@ -20,7 +20,7 @@ def main():
     parser = argparse.ArgumentParser()
     # 模型参数
     parser.add_argument("--max_enc_len", default=200, help="Encoder input max sequence length", type=int)
-    parser.add_argument("--max_dec_len", default=40, help="Decoder input max sequence length", type=int)
+    parser.add_argument("--max_dec_len", default=1, help="Decoder input max sequence length", type=int)
     parser.add_argument("--max_dec_steps", default=100,
                         help="maximum number of words of the predicted abstract", type=int)
     parser.add_argument("--min_dec_steps", default=30,
@@ -79,6 +79,7 @@ def main():
     gpus = tf.config.experimental.list_physical_devices(device_type='GPU')
 
     if gpus:
+        print('using gpuuuuuuuuuuuuuuuuuuuuu')
         tf.config.experimental.set_visible_devices(devices=gpus[0], device_type='GPU')
 
     if params["mode"] == "train":

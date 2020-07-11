@@ -73,7 +73,7 @@ class Decoder(tf.keras.layers.Layer):
 
         # x shape after passing through embedding == (batch_size, 1, embedding_dim)
         x = self.embedding(x)
-        # print('x is ', x)
+        # print('x shape is ', x.shape)
 
         # x shape after concatenation == (batch_size, 1, embedding_dim + hidden_size)
         x = tf.concat([tf.expand_dims(context_vector, 1), x], axis=-1)
