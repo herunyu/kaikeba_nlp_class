@@ -42,7 +42,7 @@ class SequenceToSequence(tf.keras.Model):
             如：xxx = self.decoder(), 采用Teachering Forcing方法
             """
             context_vector, attn_dist = self.attention(dec_hidden, enc_output)
-            pred, dec_output, _ = self.decoder(dec_inp, dec_hidden, enc_output, context_vector)
+            _, pred, _ = self.decoder(dec_inp, dec_hidden, enc_output, context_vector)
             predictions.append(pred)
             attentions.append(attn_dist)
 
