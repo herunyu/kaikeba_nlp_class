@@ -1,4 +1,5 @@
 
 *.DS_Store
 *.pyc
-*.vscode/settings.json
+*/.vscode/settings.json
+*/datasets
