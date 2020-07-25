@@ -87,7 +87,8 @@ def save_predict_result(results, params):
     # 读取结果
     test_df = pd.read_csv(params['test_x_dir'])
     # 填充结果
-    test_df['Prediction'] = results[:20000]
+    test_df = test_df[:1000]
+    test_df['Prediction'] = results[:1000]
     # 　提取ID和预测结果两列
     test_df = test_df[['QID', 'Prediction']]
     # 保存结果.

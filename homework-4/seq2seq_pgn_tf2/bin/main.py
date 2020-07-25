@@ -92,7 +92,7 @@ def main():
     gpus = tf.config.experimental.list_physical_devices(device_type='GPU')
     # print('grus is ', gpus)
     if gpus:
-        tf.config.experimental.set_visible_devices(devices=gpus[3], device_type='GPU')
+        tf.config.experimental.set_visible_devices(devices=gpus[0], device_type='GPU')
 
     if params["mode"] == "train":
         params["steps_per_epoch"] = NUM_SAMPLES//params["batch_size"]
