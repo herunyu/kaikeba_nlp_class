@@ -3,3 +3,5 @@
 *.pyc
 */.vscode/settings.json
 */datasets
+*.txt
+*.bin
