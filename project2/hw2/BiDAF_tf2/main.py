@@ -11,6 +11,7 @@ tf.get_logger().setLevel(logging.ERROR)
 import layers
 import preprocess
 import numpy as np
+from tensorflow.keras.callbacks import EarlyStopping
 
 print("tf.__version__:", tf.__version__)
 gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -29,11 +30,10 @@ if gpus:
 class BiDAF:
 
     def __init__(
-            self, char_clen, char_qlen, word_clen, word_qlen, char_emb_size, word_emb_size,
+            self, char_clen, char_qlen, word_clen, word_qlen, char_emb_size, word_emb_size, glove_w2vec_matrix,
             max_char_features=5000,
-            max_word_features,
-            conv_layers,
-            glove_w2vec_matrix,
+            max_word_features=123343,
+            conv_layers=[(10, 3), (10, 4), (10, 5)],
             num_highway_layers=2,
             encoder_dropout=0,
             num_decoders=2,
@@ -70,6 +70,7 @@ class BiDAF:
         self.encoder_dropout = encoder_dropout
         self.num_decoders = num_decoders
         self.decoder_dropout = decoder_dropout
+        self.glove_w2vec_matrix = glove_w2vec_matrix
 
     def build_model(self):
         """
@@ -80,53 +81,58 @@ class BiDAF:
         # TODO：homework：使用glove word embedding（或自己训练的w2v） 和 CNN char embedding 
 
         # 定义字符级的context, question, 词级的context,question的输入
-        char_cinn = tf.keras.layers.Input(shape=(self.char_clen,), name='char_context_input')
-        char_qinn = tf.keras.layers.Input(shape=(self.char_qlen,), name='char_question_input')
+        char_cinn = tf.keras.layers.Input(shape=(self.word_clen, self.char_clen,), name='char_context_input')
+        char_qinn = tf.keras.layers.Input(shape=(self.word_qlen, self.char_qlen,), name='char_question_input')
         word_cinn = tf.keras.layers.Input(shape=(self.word_clen,), name='word_context_input')
         word_qinn = tf.keras.layers.Input(shape=(self.word_qlen,), name='word_question_input')
 
         # 词向量的embedding层
-        word_embedding_layer = tf.keras.layers.Embedding(self.max_word_features, word_emb_size, weights=[glove_w2vec_matrix])
+        word_embedding_layer = tf.keras.layers.Embedding(self.max_word_features, self.word_emb_size, weights=[self.glove_w2vec_matrix])
         # 字符级向量的embedding层
         char_embedding_layer = tf.keras.layers.Embedding(self.max_char_features,
                                                     self.char_emb_size,
                                                     embeddings_initializer='uniform',
                                                     )
         # 输入到各层中
-        char_cemb = char_embedding_layer(cinn)
-        char_qemb = char_embedding_layer(qinn)
-        word_cemb = word_embedding_layer(cinn)
-        word_qemb = word_embedding_layer(qinn)
+        char_cemb = char_embedding_layer(char_cinn) 
+        char_qemb = char_embedding_layer(char_qinn)
+        word_cemb = word_embedding_layer(word_cinn)
+        word_qemb = word_embedding_layer(word_qinn)
         
         # context char embedding经过cnn后作为字符级别的embedding
         char_c_convolution_output = []
         for num_filters, filter_width in self.conv_layers:
-            conv = tf.keras.layers.Convolution1D(filters=num_filters,
+            conv = tf.keras.layers.Conv1D(filters=num_filters,
                                  kernel_size=filter_width,
-                                 activation='tanh',
-                                 name='Conv1D_{}_{}'.format(num_filters, filter_width))(char_cemb)
-            pool = tf.keras.layers.GlobalMaxPooling1D(name='MaxPoolingOverTime_{}_{}'.format(num_filters, filter_width))(conv)
+                                 activation='relu',
+                                 name='Conv1D_C_{}_{}'.format(num_filters, filter_width))(char_cemb)
+            # print(conv.shape)
+            pool = tf.keras.layers.MaxPool2D(data_format='channels_first', pool_size=(conv.shape[2],1),name='MaxPoolingOverTime_C_{}_{}'.format(num_filters, filter_width))(conv)
+            # print(pool.shape)
             char_c_convolution_output.append(pool)
 
-        char_cemb = Concatenate()(char_c_convolution_output)
+        char_cemb = tf.keras.layers.concatenate(char_c_convolution_output, axis=-1)
+        char_cemb = tf.squeeze(char_cemb, axis=2)
 
         # question char embedding经过cnn后作为字符级别的embedding
         char_q_convolution_output = []
         for num_filters, filter_width in self.conv_layers:
             conv = tf.keras.layers.Convolution1D(filters=num_filters,
                                  kernel_size=filter_width,
-                                 activation='tanh',
-                                 name='Conv1D_{}_{}'.format(num_filters, filter_width))(char_qemb)
-            pool = tf.keras.layers.GlobalMaxPooling1D(name='MaxPoolingOverTime_{}_{}'.format(num_filters, filter_width))(conv)
+                                 activation='relu',
+                                 name='Conv1D_Q_{}_{}'.format(num_filters, filter_width))(char_qemb)
+            pool = tf.keras.layers.MaxPool2D(data_format='channels_first', pool_size=(conv.shape[2],1), name='MaxPoolingOverTime_Q_{}_{}'.format(num_filters, filter_width))(conv)
             char_q_convolution_output.append(pool)
 
-        char_qemb = Concatenate()(char_q_convolution_output)
-        
+
+        char_qemb = tf.keras.layers.concatenate(char_q_convolution_output, axis=-1)
+        char_qemb = tf.squeeze(char_qemb, axis=2)
+
         # word级别和char级别的concat
-        cemb = Concatenate()(word_cemb, char_cemb)
-        qemb = Concatenate()(word_qemb, char_qemb)
-
-
+        cemb = tf.keras.layers.concatenate([word_cemb, char_cemb])
+        qemb = tf.keras.layers.concatenate([word_qemb, char_qemb])
+        print(cemb.shape)
+        print(qemb.shape)   
         for i in range(self.num_highway_layers):
             """
             使用两层高速神经网络
@@ -141,7 +147,7 @@ class BiDAF:
         # 编码器 双向LSTM
         encoder_layer = tf.keras.layers.Bidirectional(
             tf.keras.layers.LSTM(
-                self.emb_size,
+                self.word_emb_size,
                 recurrent_dropout=self.encoder_dropout,
                 return_sequences=True,
                 name='RNNEncoder'
@@ -170,7 +176,7 @@ class BiDAF:
         for i in range(self.num_decoders):
             decoder_layer = tf.keras.layers.Bidirectional(
                 tf.keras.layers.LSTM(
-                    self.emb_size,
+                    self.word_emb_size,
                     recurrent_dropout=self.decoder_dropout,
                     return_sequences=True,
                     name=f'RNNDecoder{i}'
@@ -188,7 +194,8 @@ class BiDAF:
         output_layer = layers.Combine(name='CombineOutputs')
         out = output_layer([span_begin_prob, span_end_prob])
 
-        inn = [cinn, qinn]
+        inn = [char_cinn, word_cinn, char_qinn, word_qinn]
+        # inn = [char_cinn, char_qinn]
 
         self.model = tf.keras.models.Model(inn, out)
         self.model.summary(line_length=128)
@@ -266,24 +273,32 @@ if __name__ == '__main__':
         './data/squad/dev-v1.1.json',
         './data/squad/dev-v1.1.json'
     ])
-    train_c, train_q, train_y = ds.get_dataset('./data/squad/train-v1.1.json')
-    test_c, test_q, test_y = ds.get_dataset('./data/squad/dev-v1.1.json')
+    train_c, train_cw, train_q, train_qw, train_y = ds.get_dataset_word('./data/squad/train-v1.1.json', data_type='train')
+    test_c, test_cw, test_q, test_qw, test_y = ds.get_dataset_word('./data/squad/dev-v1.1.json', data_type='test')
 
-    print(train_c.shape, train_q.shape, train_y.shape)
-    print(test_c.shape, test_q.shape, test_y.shape)
+    print(train_c.shape, train_cw.shape, train_q.shape, train_qw.shape, train_y.shape)
+    print(test_c.shape, test_cw.shape, test_q.shape, test_qw.shape, test_y.shape)
 
-    # print(train_c[:3])
 
     bidaf = BiDAF(
-        clen=ds.max_clen,
-        qlen=ds.max_qlen,
-        emb_size=50,
-        max_features=len(ds.charset)
+        char_clen=20,
+        char_qlen=20,
+        word_clen=ds.max_clen,
+        word_qlen=ds.max_qlen,
+        char_emb_size=10,
+        word_emb_size=100,
+        glove_w2vec_matrix=ds.wv_matrix
+        # emb_size=50,
+        # max_features=len(ds.charset)
     )
     bidaf.build_model()
+    early_stopping = EarlyStopping(monitor='val_accuracy', patience=3, mode='max')
     bidaf.model.fit(
-        [train_c, train_q], train_y,
+        [train_c, train_cw, train_q, train_qw], train_y,
         batch_size=64,
         epochs=10,
-        validation_data=([test_c, test_q], test_y)
+        callbacks=[early_stopping],
+        validation_data=([test_c, test_cw, test_q, test_qw], test_y)
     )
+
+    bidaf.model.save_weights('./checkpoints/bidaf1')
