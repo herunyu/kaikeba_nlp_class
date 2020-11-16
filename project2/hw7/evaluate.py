@@ -152,8 +152,8 @@ def calc_f1_score(answers, prediction):
         ans_segs = _tokenize_chinese_chars(_normalize(ans))
         prediction_segs = _tokenize_chinese_chars(_normalize(prediction))
         # if args.debug:
-        print(json.dumps(ans_segs, ensure_ascii=False))
-        print(json.dumps(prediction_segs, ensure_ascii=False))
+        # print(json.dumps(ans_segs, ensure_ascii=False))
+        # print(json.dumps(prediction_segs, ensure_ascii=False))
         lcs, lcs_len = find_lcs(ans_segs, prediction_segs)
         if lcs_len == 0:
             f1_scores.append(0)
