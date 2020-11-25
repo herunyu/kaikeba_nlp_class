@@ -1,0 +1,203 @@
+(deep) root@c0636d864847:/notebooks/hry/hw8_code# ./eval_ckp_bert.sh 
+2020-11-25 03:24:03.287099: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcudart.so.10.1
+11/25/2020 03:24:05 - WARNING - __main__ -   Process rank: -1, device: cuda, n_gpu: 1, distributed training: False, 16-bits training: False
+11/25/2020 03:24:05 - INFO - transformers.configuration_utils -   loading configuration file bert_output/DuReader/checkpoint-14000/config.json
+11/25/2020 03:24:05 - INFO - transformers.configuration_utils -   Model config BertConfig {
+  "_num_labels": 2,
+  "architectures": [
+    "BertForQuestionAnswering"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "bos_token_id": null,
+  "directionality": "bidi",
+  "do_sample": false,
+  "early_stopping": false,
+  "eos_token_id": null,
+  "finetuning_task": null,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "id2label": {
+    "0": "LABEL_0",
+    "1": "LABEL_1"
+  },
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "is_decoder": false,
+  "is_encoder_decoder": false,
+  "label2id": {
+    "LABEL_0": 0,
+    "LABEL_1": 1
+  },
+  "layer_norm_eps": 1e-12,
+  "length_penalty": 1.0,
+  "max_length": 20,
+  "max_position_embeddings": 512,
+  "min_length": 0,
+  "model_type": "bert",
+  "no_repeat_ngram_size": 0,
+  "num_attention_heads": 12,
+  "num_beams": 1,
+  "num_hidden_layers": 12,
+  "num_return_sequences": 1,
+  "output_attentions": false,
+  "output_hidden_states": false,
+  "output_past": true,
+  "pad_token_id": 0,
+  "pooler_fc_size": 768,
+  "pooler_num_attention_heads": 12,
+  "pooler_num_fc_layers": 3,
+  "pooler_size_per_head": 128,
+  "pooler_type": "first_token_transform",
+  "pruned_heads": {},
+  "repetition_penalty": 1.0,
+  "temperature": 1.0,
+  "top_k": 50,
+  "top_p": 1.0,
+  "torchscript": false,
+  "type_vocab_size": 2,
+  "use_bfloat16": false,
+  "vocab_size": 21159
+}
+
+11/25/2020 03:24:05 - INFO - transformers.configuration_utils -   loading configuration file bert_output/DuReader/checkpoint-14000/config.json
+11/25/2020 03:24:05 - INFO - transformers.configuration_utils -   Model config BertConfig {
+  "_num_labels": 2,
+  "architectures": [
+    "BertForQuestionAnswering"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "bos_token_id": null,
+  "directionality": "bidi",
+  "do_sample": false,
+  "early_stopping": false,
+  "eos_token_id": null,
+  "finetuning_task": null,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "id2label": {
+    "0": "LABEL_0",
+    "1": "LABEL_1"
+  },
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "is_decoder": false,
+  "is_encoder_decoder": false,
+  "label2id": {
+    "LABEL_0": 0,
+    "LABEL_1": 1
+  },
+  "layer_norm_eps": 1e-12,
+  "length_penalty": 1.0,
+  "max_length": 20,
+  "max_position_embeddings": 512,
+  "min_length": 0,
+  "model_type": "bert",
+  "no_repeat_ngram_size": 0,
+  "num_attention_heads": 12,
+  "num_beams": 1,
+  "num_hidden_layers": 12,
+  "num_return_sequences": 1,
+  "output_attentions": false,
+  "output_hidden_states": false,
+  "output_past": true,
+  "pad_token_id": 0,
+  "pooler_fc_size": 768,
+  "pooler_num_attention_heads": 12,
+  "pooler_num_fc_layers": 3,
+  "pooler_size_per_head": 128,
+  "pooler_type": "first_token_transform",
+  "pruned_heads": {},
+  "repetition_penalty": 1.0,
+  "temperature": 1.0,
+  "top_k": 50,
+  "top_p": 1.0,
+  "torchscript": false,
+  "type_vocab_size": 2,
+  "use_bfloat16": false,
+  "vocab_size": 21159
+}
+
+11/25/2020 03:24:05 - INFO - transformers.tokenization_utils -   Model name 'bert_output/DuReader/checkpoint-14000' not found in model shortcut name list (bert-base-uncased, bert-large-uncased, bert-base-cased, bert-large-cased, bert-base-multilingual-uncased, bert-base-multilingual-cased, bert-base-chinese, bert-base-german-cased, bert-large-uncased-whole-word-masking, bert-large-cased-whole-word-masking, bert-large-uncased-whole-word-masking-finetuned-squad, bert-large-cased-whole-word-masking-finetuned-squad, bert-base-cased-finetuned-mrpc, bert-base-german-dbmdz-cased, bert-base-german-dbmdz-uncased, bert-base-finnish-cased-v1, bert-base-finnish-uncased-v1, bert-base-dutch-cased). Assuming 'bert_output/DuReader/checkpoint-14000' is a path, a model identifier, or url to a directory containing tokenizer files.
+11/25/2020 03:24:05 - INFO - transformers.tokenization_utils -   loading file bert_output/DuReader/checkpoint-14000/vocab.txt
+11/25/2020 03:24:05 - INFO - transformers.tokenization_utils -   loading file bert_output/DuReader/checkpoint-14000/added_tokens.json
+11/25/2020 03:24:05 - INFO - transformers.tokenization_utils -   loading file bert_output/DuReader/checkpoint-14000/special_tokens_map.json
+11/25/2020 03:24:05 - INFO - transformers.tokenization_utils -   loading file bert_output/DuReader/checkpoint-14000/tokenizer_config.json
+11/25/2020 03:24:05 - INFO - transformers.modeling_utils -   loading weights file bert_output/DuReader/checkpoint-14000/pytorch_model.bin
+11/25/2020 03:24:13 - INFO - __main__ -   Training/evaluation parameters Namespace(adam_epsilon=1e-08, cache_dir='', config_name='', data_dir='data', device=device(type='cuda'), do_eval=True, do_lower_case=True, do_train=False, doc_stride=128, eval_all_checkpoints=False, evaluate_during_training=False, fp16=False, fp16_opt_level='O1', gradient_accumulation_steps=1, lang_id=0, learning_rate=5e-05, local_rank=-1, logging_steps=500, max_answer_length=30, max_grad_norm=1.0, max_query_length=64, max_seq_length=256, max_steps=-1, model_name_or_path='bert_output/DuReader/checkpoint-14000', model_type='bert', n_best_size=20, n_gpu=1, no_cuda=False, null_score_diff_threshold=0.0, num_train_epochs=3.0, output_dir='./bert_output/DuReader/', overwrite_cache=True, overwrite_output_dir=False, per_gpu_eval_batch_size=8, per_gpu_train_batch_size=8, predict_file=None, save_steps=500, seed=42, server_ip='', server_port='', threads=1, tokenizer_name='', train_file=None, verbose_logging=False, version_2_with_negative=False, warmup_steps=0, weight_decay=0.0)
+11/25/2020 03:24:13 - INFO - __main__ -   Loading checkpoint bert_output/DuReader/checkpoint-14000 for evaluation
+11/25/2020 03:24:13 - INFO - __main__ -   Evaluate the following checkpoints: ['bert_output/DuReader/checkpoint-14000']
+11/25/2020 03:24:13 - INFO - transformers.configuration_utils -   loading configuration file bert_output/DuReader/checkpoint-14000/config.json
+11/25/2020 03:24:13 - INFO - transformers.configuration_utils -   Model config BertConfig {
+  "_num_labels": 2,
+  "architectures": [
+    "BertForQuestionAnswering"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "bos_token_id": null,
+  "directionality": "bidi",
+  "do_sample": false,
+  "early_stopping": false,
+  "eos_token_id": null,
+  "finetuning_task": null,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "id2label": {
+    "0": "LABEL_0",
+    "1": "LABEL_1"
+  },
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "is_decoder": false,
+  "is_encoder_decoder": false,
+  "label2id": {
+    "LABEL_0": 0,
+    "LABEL_1": 1
+  },
+  "layer_norm_eps": 1e-12,
+  "length_penalty": 1.0,
+  "max_length": 20,
+  "max_position_embeddings": 512,
+  "min_length": 0,
+  "model_type": "bert",
+  "no_repeat_ngram_size": 0,
+  "num_attention_heads": 12,
+  "num_beams": 1,
+  "num_hidden_layers": 12,
+  "num_return_sequences": 1,
+  "output_attentions": false,
+  "output_hidden_states": false,
+  "output_past": true,
+  "pad_token_id": 0,
+  "pooler_fc_size": 768,
+  "pooler_num_attention_heads": 12,
+  "pooler_num_fc_layers": 3,
+  "pooler_size_per_head": 128,
+  "pooler_type": "first_token_transform",
+  "pruned_heads": {},
+  "repetition_penalty": 1.0,
+  "temperature": 1.0,
+  "top_k": 50,
+  "top_p": 1.0,
+  "torchscript": false,
+  "type_vocab_size": 2,
+  "use_bfloat16": false,
+  "vocab_size": 21159
+}
+
+11/25/2020 03:24:13 - INFO - transformers.modeling_utils -   loading weights file bert_output/DuReader/checkpoint-14000/pytorch_model.bin
+11/25/2020 03:24:16 - INFO - __main__ -   Creating features from dataset file at data
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  4.67it/s]
+convert squad examples to features: 100%|██████████████████████████████████████████████████████████████████████████| 1417/1417 [00:05<00:00, 280.04it/s]
+add example index and unique id: 100%|██████████████████████████████████████████████████████████████████████████| 1417/1417 [00:00<00:00, 352866.40it/s]
+11/25/2020 03:24:21 - INFO - __main__ -   Saving features into cached file data/cached_dev_checkpoint-14000_256
+11/25/2020 03:24:23 - INFO - __main__ -   ***** Running evaluation  *****
+11/25/2020 03:24:23 - INFO - __main__ -     Num examples = 2552
+11/25/2020 03:24:23 - INFO - __main__ -     Batch size = 8
+Evaluating: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████| 319/319 [00:21<00:00, 14.53it/s]
+11/25/2020 03:24:45 - INFO - __main__ -     Evaluation done in total 21.952467 secs (0.008602 sec per example)
+11/25/2020 03:24:45 - INFO - transformers.data.metrics.squad_metrics -   Writing predictions to: ./bert_output/DuReader/predictions_.json
+11/25/2020 03:24:45 - INFO - transformers.data.metrics.squad_metrics -   Writing nbest to: ./bert_output/DuReader/nbest_predictions_.json
+{"F1": "81.790", "EM": "69.654", "TOTAL": 1417, "SKIP": 0}
