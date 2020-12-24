@@ -1,0 +1,82 @@
+#### This file contains tests to evaluate that your bot behaves as expected.
+#### If you want to learn more, please see the docs: https://rasa.com/docs/rasa/testing-your-assistant
+
+stories:
+- story: happy path 1
+  steps:
+  - user: |
+      你好呀
+    intent: greet
+  - action: utter_greet
+  - user: |
+      真棒！
+    intent: mood_great
+  - action: utter_happy
+
+- story: happy path 2
+  steps:
+  - user: |
+      最近如何
+    intent: greet
+  - action: utter_greet
+  - user: |
+      我最近感觉不错
+    intent: mood_great
+  - action: utter_happy
+  - user: |
+      回见啦
+    intent: goodbye
+  - action: utter_goodbye
+
+- story: sad path 1
+  steps:
+  - user: |
+      嘿
+    intent: greet
+  - action: utter_greet
+  - user: |
+      不太好
+    intent: mood_unhappy
+  - action: utter_cheer_up
+  - action: utter_did_that_help
+  - user: |
+      是的
+    intent: affirm
+  - action: utter_happy
+
+- story: sad path 2
+  steps:
+  - user: |
+      你好
+    intent: greet
+  - action: utter_greet
+  - user: |
+      感觉不好
+    intent: mood_unhappy
+  - action: utter_cheer_up
+  - action: utter_did_that_help
+  - user: |
+      不行
+    intent: deny
+  - action: utter_goodbye
+
+- story: say goodbye
+  steps:
+  - user: |
+      没事了
+    intent: goodbye
+  - action: utter_goodbye
+
+- story: bot challenge
+  steps:
+  - user: |
+      你是机器人吗
+    intent: bot_challenge
+  - action: utter_iamabot
+
+- story: ask function
+  steps:
+  - user: |
+      你能干点啥
+    intent: function
+  - action: utter_function

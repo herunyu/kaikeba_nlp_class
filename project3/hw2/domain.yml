@@ -1,0 +1,38 @@
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+intents:
+- greet
+- goodbye
+- affirm
+- deny
+- mood_great
+- mood_unhappy
+- bot_challenge
+- function
+responses:
+  utter_greet:
+  - text: 您好呀！
+  - text: 很高兴认识您！
+  - text: 您好我好大家好！
+  - text: 很荣幸认识您！
+  utter_cheer_up:
+  - image: https://i.imgur.com/nGF1K8f.jpg
+    text: '这个小脑斧可不可爱呀:'
+  - image: https://i.imgur.com/nGF1K8f.jpg
+    text: 你看这是什么？
+  utter_did_that_help:
+  - text: 现在有没有感觉好一点?
+  utter_happy:
+  - text: 真棒！
+  utter_goodbye:
+  - text: 再见！
+  - text: 下次见！
+  - text: 回见！
+  utter_iamabot:
+  - text: 你猜对了！我是机器人！
+  - text: 你觉得我是机器人还是不是机器人呢？
+  - text: 我应该可能大概估计是机器人
+  utter_function:
+  - text: 目前我只能和你简单的对话
+  - text: 现在我能做的有限喔，只能简单对话~敬请期待！
