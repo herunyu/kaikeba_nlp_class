@@ -1,21 +1,16 @@
-# HW2 小结
+# HW3 小结
 
 ## 中文语料
 
 ### nlu.yml
-原有的data中的nlu.yml只有英文语料，全部更换为中文语料，并添加了function这个语料，用于询问机器人的功能
-### rules.yml
-修改原有的英文rules为中文并添加，分别为问候，再见，机器人，和功能
+添加了天气类的intent数据, 以及可查询天气的城市的lookup tables
 ### stories.yml
-添加了function path
-### test_stories.yml
-修改为中文tests并添加关于function的test
+添加了weather path
 ### domain.yml
-添加function intent，并修改responses为中文
+添加entities city和slots, 以及action_ask_weather
 
 ## pipeline设置
-由于原pipeline是英文聊天机器人的pipeline，特别是WhitespaceTokenizer是通过判断空格来进行分词，而中文并不是通过空格来区分不同的单词，所以需要尝试修改为中文的pipeline。
-查询到可以简单的用spacynlp来做，于是按照官方文档使用SpacyNLP,SpacyTokenizer,SpacyFeaturizer来对中文进行分词并提取Feature。
+修改spacy为JiebaTokenizer, 分词效果会更好，添加RegexFeatureizer和RegexEntityExtractor
 
 ## 训练
 * 训练nlu并测试
@@ -35,29 +30,7 @@ rasa test
 ```
 
 ## 小结
-### spaCy
-由于切换为spaCy来做分词，所以需要安装spaCy库，一开始没有安装所以训练会报错，安装可用pip直接安装
-```bash
-pip install spacy
-```
-然而除此之外还不够，如果直接又运行`rasa train`的话还是会报错  
-<font color=red>
-InvalidModelError: Model 'zh' is not a linked spaCy model. Please download and/or link a spaCy model, e.g. by running:  
-python -m spacy download en_core_web_md  
-python -m spacy link en_core_web_md en
-</font>  
-所以还需要安装中文模型以及link对应的模型作为spaCy zh的模型
-```bash
-python -m spacy download zh_core_web_sm
-python -m spacy link zh_core_web_sm zh
-```
-注：spaCy中有三个中文模型，可以按需下载链接，这样就可以顺利训练了  
+### 尝试使用lookup table，但还存在问题
+由于可查询天气的城市很多，我们不可能对每一个城市都写很多训练数据，这样的模型反而变成了类似规则的方法。所以采用部分训练数据并添加lookup table的方法。通过Regex Featurizer和RegexEntityExtractor来识别用户提问的实体。、在尝试做天气查询的action时，对于已经在训练数据中的实体比如北京，上海等城市，模型能准确识别出来，但是不在训练数据中的却无法识别出来，lookup table似乎并没有起到作用，初始以为是由于模型过拟合的问题导致的，但是把epoch减小之后，还是没有用处，目前暂时不知道如何解决该问题，但action和tracker中的slot的简单应用已大致掌握
 
-### FallbackClassifier
-测试storiest时发现，做了utter_cheer_up的action后，由于模型判断ambiguity=0.3 > 0.1，所以并没有按照预期继续给出utter_did_that_help的action，而是给出了action_default_fallback的action，看了一下pipeline后分析这应该是由于pipeline中最后的FallbackClassifier所导致的原因。查看文档知道
-FallbackClassifier的作用为如果nlu无法识别出用户的意图，就会给出action_default_fallback，由于没有设置这个action，所以默认在对话中没有输出。
-* threshold:如果nlu输出的所有intent的概率都小于这个参数的值，则输出nlu_fallback对应的action
-* ambiguity_threshold: 设置了这个参数，则nlu也会输出nlu_fallback的action以防止最高得分的两个intent也小于这个ambiguity_threshold.
-
-所以回到config中删除了FallbackClassifier，重新训练后模型的表现和预期一样，后面要继续深入研究pipeline中的各种classifier。
 

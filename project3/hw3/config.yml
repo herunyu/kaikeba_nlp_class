@@ -8,8 +8,8 @@ pipeline:
 # # See https://rasa.com/docs/rasa/tuning-your-model for more information.
   - name: JiebaTokenizer
   - name: RegexFeaturizer
-  # - name: RegexEntityExtractor
-  #   use_lookup_tables: True
+  - name: RegexEntityExtractor
+    use_lookup_tables: True
   - name: CountVectorsFeaturizer
   - name: CountVectorsFeaturizer
     analyzer: char_wb
