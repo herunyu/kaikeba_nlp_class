@@ -6,3 +6,5 @@
 *.bin
 /project2/hw2/BiDAF_tf2/cache
 /project2/hw2/BiDAF_tf2/checkpoints
+/project1/homework-week2/datasets
+*/*/models

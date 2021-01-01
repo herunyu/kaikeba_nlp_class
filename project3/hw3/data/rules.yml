@@ -1,0 +1,23 @@
+version: "2.0"
+
+rules:
+
+- rule: 问候
+  steps:
+  - intent: greet
+  - action: utter_greet
+
+- rule: 再见
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- rule: 机器人
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot
+
+- rule: 功能
+  steps:
+  - intent: function
+  - action: utter_function
