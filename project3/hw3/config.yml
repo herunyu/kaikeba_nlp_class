@@ -16,8 +16,8 @@ pipeline:
   #   min_ngram: 1
   #   max_ngram: 4
   - name: DIETClassifier
-    epochs: 100
-  # - name: EntitySynonymMapper
+    epochs: 200
+  - name: EntitySynonymMapper
   # - name: ResponseSelector
   #   epochs: 100
   # - name: FallbackClassifier

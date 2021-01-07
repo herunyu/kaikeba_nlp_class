@@ -14,19 +14,8 @@ from rasa_sdk import Action, Tracker
 from rasa_sdk.events import AllSlotsReset
 from rasa_sdk.executor import CollectingDispatcher
 
-
-class ActionHelloWorld(Action):
-
-    def name(self) -> Text:
-        return "action_hello_world"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        dispatcher.utter_message(text="Hello World!")
-
-        return []
+from rasa_sdk.knowledge_base.storage import InMemoryKnowledgeBase
+from rasa_sdk.knowledge_base.actions import ActionQueryKnowledgeBase
 
 class ActionAskWeather(Action):
    def name(self) -> Text:
@@ -50,6 +39,17 @@ class ActionAskWeather(Action):
         dispatcher.utter_message(text=response)
 
         return [AllSlotsReset()]
+
+
+class MyKnowledgeBaseAction(ActionQueryKnowledgeBase):
+    def __init__(self):
+        knowledge_base = InMemoryKnowledgeBase("city_processed.json")
+
+        knowledge_base.set_representation_function_of_object(
+            "city", lambda obj: obj["cityZh"]
+        )
+
+        super().__init__(knowledge_base)
 
 # class ActionAskWeather(Action):
 #    def name(self) -> Text:

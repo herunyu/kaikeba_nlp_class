@@ -11,10 +11,31 @@ intents:
 - bot_challenge
 - function
 - ask_weather
+- query_knowledge_base
 entities:
 - city
+- object_type
+- mention
+- attribute
+- provinceZh
+- coordinates
 slots:
   city:
+    type: text
+    influence_conversation: false
+  object_type:
+    type: text
+    influence_conversation: false
+  mention:
+    type: text
+    influence_conversation: false
+  attribute:
+    type: text
+    influence_conversation: false
+  provinceZh:
+    type: text
+    influence_conversation: false
+  coordinates:
     type: text
     influence_conversation: false
 responses:
@@ -45,3 +66,4 @@ responses:
   - text: 现在我能做的有限喔，只能简单对话~敬请期待！
 actions:
 - action_ask_weather
+- action_query_knowledge_base

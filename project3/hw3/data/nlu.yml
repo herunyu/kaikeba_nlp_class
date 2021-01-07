@@ -3327,21 +3327,10 @@ nlu:
     - 云林
 
 
-# - intent: query_knowledge_base
-#   examples: |
-#     - [北京]{"entity": "object_type", "value": "city"}的[坐标]{"entity": "attribute", "value": "price-range"}是多少
-#     - [珠海]{"entity": "object_type", "value": "city"}坐标
-#     - [珠海]{"entity": "object_type", "value": "city"}属于哪个省
-#     - list some [restaurants]{"entity": "object_type", "value": "restaurant"}
-#     - can you name some [restaurants]{"entity": "object_type", "value": "restaurant"} please?
-#     - can you show me some [restaurants]{"entity": "object_type", "value": "restaurant"} options
-#     - list [German](cuisine) [restaurants]{"entity": "sobject_type", "value": "restaurant"}
-#     - do you have any [mexican](cuisine) [restaurants]{"entity": "object_type", "value": "restaurant"}?
-#     - do you know the [price range]{"entity": "attribute", "value": "price-range"} of [that one](mention)?
-#     - what [cuisine](attribute) is [it](mention)?
-#     - do you know what [cuisine](attribute) the [last one]{"entity": "mention", "value": "LAST"} has?
-#     - does the [first one]{"entity": "mention", "value": "1"} have [outside seating]{"entity": "attribute", "value": "outside-seating"}?
-#     - what is the [price range]{"entity": "attribute", "value": "price-range"} of [Berlin Burrito Company](restaurant)?
-#     - what about [I due forni](restaurant)?
-#     - can you tell me the [price range](attribute) of [that restaurant](mention)?
-#     - what [cuisine](attribute) do [they](mention) have?
+- intent: query_knowledge_base
+  examples: |
+    - [广东](provinceZh)有什么[城市]{"entity": "object_type", "value": "city"}
+    - 可以列一下[广东](provinceZh)有什么[城市]{"entity": "object_type", "value": "city"}吗
+    - [北京]{"entity": "city"}的[坐标]{"entity": "attribute", "value": "coordinates"}是多少
+    - [珠海]{"entity": "city"}[坐标]{"entity": "attribute", "value": "coordinates"}
+    - [珠海]{"entity": "city"}属于哪个[省]{"entity": "attribute", "value": "provinceZh"}
